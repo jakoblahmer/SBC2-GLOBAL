@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SBC2_GLOBAL" default="compile" basedir=".">
+
+    <property environment="env"/>
+
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="jarFileName.model" value="sbc_models"/>
+    <property name="jarFileName.gui" value="sbc_gui"/>
+            
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+		<pathelement location="${build.dir}"/>
+	</path>
+    
+    <target name="compile">
+		<mkdir dir="${build.dir}"/>
+		<javac srcdir="${src.dir}"
+			destdir="${build.dir}"
+			debug="on"
+			deprecation="on"
+			classpathref="classpath" />
+	</target>
+    
+    <target name="dist" depends="compile">
+    	<mkdir dir="${dist.dir}"/>
+		<jar jarfile="${dist.dir}/${jarFileName.model}.jar">
+			<fileset dir="${build.dir}">
+				<include name="sbc/model/*"/>
+			</fileset>
+		</jar>
+		<jar jarfile="${dist.dir}/${jarFileName.gui}.jar">
+			<fileset dir="${build.dir}">
+				<include name="sbc/gui/*"/>
+			</fileset>
+		</jar>
+	</target>
+    
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>
+</project>
