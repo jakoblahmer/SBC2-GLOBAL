@@ -453,6 +453,15 @@ public class AdminGUI extends Thread {
 	}
 	
 	/**
+	 * adds colored eggs (amount of count) and adopts the live statistics (removes it from eggs)
+	 * @param count
+	 */
+	public void addColoredEgg(int count)	{
+		this.updateEgg(-count);
+		this.updateColoredEgg(count);
+	}
+	
+	/**
 	 * adds a nest and adopts the live statistics
 	 * @param nest
 	 */
