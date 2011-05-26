@@ -118,7 +118,7 @@ public class Egg extends Product {
 	}
 	
 	public String toString()	{
-		return "EGG: [id: " + id + ", producer_id: " + producer_id + ", colorCount: " + this.colorCount + ", colors: " + colorToString() + "]";
+		return "EGG: [id: " + id + ", producer_id: " + producer_id + ", colorCount: " + this.colorCount + ", colors: " + colorToString() + ", failure: " + this.error + "]";
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class ChocolateRabbit extends Product {
 	}
 
 	public String toString()	{
-		return "ChocolateRabbit: [id: " + id + ", producer_id: " + producer_id + "]";
+		return "ChocolateRabbit: [id: " + id + ", producer_id: " + producer_id + ", failure: " + this.error + "]";
 	}
 	
 }
