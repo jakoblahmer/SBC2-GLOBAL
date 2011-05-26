@@ -64,6 +64,8 @@ public class AdminGUI extends Thread {
 	private JFormattedTextField chickenProducersTextField;
 	private ProducerInterface producerCallback;
 
+	private DefaultTableModel infoTableModel;
+
 	/**
 	 * constructer,
 	 * 	expects a callback
@@ -244,6 +246,7 @@ public class AdminGUI extends Thread {
 		model.addRow(new Object[]{"Choco Rabbits:", 0});
 		model.addRow(new Object[]{"Nests:", 0});
 		model.addRow(new Object[]{"Completed Nests:", 0});
+		model.addRow(new Object[]{"Error Nests:", 0});
 		
 		infoTable = new JTable();
 		infoTable = autoResizeColWidth(infoTable, model);
@@ -256,6 +259,8 @@ public class AdminGUI extends Thread {
 
 		infoTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		scrollPane.setBounds(10 + insets.left, 260 + insets.top, 170, 150);
+		
+		infoTableModel = model;
 		
 	}
 	
@@ -387,25 +392,100 @@ public class AdminGUI extends Thread {
 	 * @param nestCount
 	 * @param nestCompletedCount
 	 */
-	public void updateInfoData(int eggCount, int eggColoredCount, int chocoCount, int nestCount, int nestCompletedCount)	{
-		DefaultTableModel model = (DefaultTableModel) infoTable.getModel();
+	public void updateInfoData(int eggCount, int eggColoredCount, int chocoCount, int nestCount, int nestCompletedCount, int nestErrorCount)	{
 		
 		int tmp;
 		// egg count
-		tmp = (Integer)model.getValueAt(0, 1) + eggCount;
-		model.setValueAt((tmp < 0 ? 0 : tmp), 0, 1);
+		tmp = (Integer)infoTableModel.getValueAt(0, 1) + eggCount;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 0, 1);
 		// egg color count
-		tmp = (Integer)model.getValueAt(1, 1) + eggColoredCount;
-		model.setValueAt((tmp < 0 ? 0 : tmp), 1, 1);
+		tmp = (Integer)infoTableModel.getValueAt(1, 1) + eggColoredCount;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 1, 1);
 		// choco count
-		tmp = (Integer)model.getValueAt(2, 1) + chocoCount;
-		model.setValueAt((tmp < 0 ? 0 : tmp), 2, 1);
+		tmp = (Integer)infoTableModel.getValueAt(2, 1) + chocoCount;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 2, 1);
 		// nest count
-		tmp = (Integer)model.getValueAt(3, 1) + nestCount;
-		model.setValueAt((tmp < 0 ? 0 : tmp), 3, 1);
+		tmp = (Integer)infoTableModel.getValueAt(3, 1) + nestCount;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 3, 1);
 		// nest completed count
-		tmp = (Integer)model.getValueAt(4, 1) + nestCompletedCount;
-		model.setValueAt((tmp < 0 ? 0 : tmp), 4, 1);
+		tmp = (Integer)infoTableModel.getValueAt(4, 1) + nestCompletedCount;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 4, 1);
+		// nest error count
+		tmp = (Integer)infoTableModel.getValueAt(5, 1) + nestErrorCount;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 5, 1);
+	}
+	
+	
+	public void updateEgg(int count)	{
+		// egg count
+		int tmp = (Integer)infoTableModel.getValueAt(0, 1) + count;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 0, 1);
+	}
+
+	public void updateColoredEgg(int count)	{
+		// egg color count
+		int tmp = (Integer)infoTableModel.getValueAt(1, 1) + count;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 1, 1);
+	}
+	
+	public void updateChoco(int count)	{
+		// choco count
+		int tmp = (Integer)infoTableModel.getValueAt(2, 1) + count;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 2, 1);
+	}
+	
+	public void updateNestCount(int count)	{
+		// nest count
+		int tmp = (Integer)infoTableModel.getValueAt(3, 1) + count;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 3, 1);
+	}
+	
+	public void updateCompletedNestCount(int count)	{
+		// nest completed count
+		int tmp = (Integer)infoTableModel.getValueAt(4, 1) + count;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 4, 1);
+	}
+	
+	public void updateErrorNestCount(int count)	{
+		// nest error count
+		int tmp = (Integer)infoTableModel.getValueAt(5, 1) + count;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 5, 1);
+	}
+	
+	/**
+	 * adds a nest and adopts the live statistics
+	 * @param nest
+	 */
+	public void addNest(Nest nest)	{
+		// add 1 to nest count
+		int tmp = (Integer)infoTableModel.getValueAt(3, 1) + 1;
+		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 3, 1);
+		// remove 2 eggs
+		this.updateColoredEgg(-2);
+		this.updateChoco(-1);
+		this.updateNest(nest);
+	}
+	
+	/**
+	 * adds a nest with an error and adopts the live statistics
+	 * @param nest
+	 */
+	public void addErrorNest(Nest nest)	{
+		// remove 1 nest
+		this.updateNestCount(-1);
+		this.updateErrorNestCount(1);
+		this.updateNest(nest);
+	}
+	
+	/**
+	 * adds a completed nest and adopts the live statistics
+	 * @param nest
+	 */
+	public void addCompletedNest(Nest nest)	{
+		// remove 1 nest
+		this.updateNestCount(-1);
+		this.updateCompletedNestCount(1);
+		this.updateNest(nest);
 	}
 	
 	/**
