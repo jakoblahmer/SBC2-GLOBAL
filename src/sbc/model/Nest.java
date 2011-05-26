@@ -8,6 +8,8 @@ public class Nest extends MessageObject {
 	
 	private int shipper_id;
 	
+	private int tester_id;
+	
 	private Egg egg1 = null;
 	
 	private Egg egg2 = null;
@@ -16,14 +18,18 @@ public class Nest extends MessageObject {
 	
 	private boolean shipped;
 	
+	private boolean tested;
+	
 	public Nest()	{
 		super();
 		this.shipped = false;
+		this.tested = false;
 	}
 	
 	public Nest(int builder_id)	{
 		super();
 		this.shipped = false;
+		this.tested = false;
 		this.builder_id = builder_id;
 	}
 	
@@ -84,6 +90,14 @@ public class Nest extends MessageObject {
 		this.shipped = shipped;
 	}
 
+	public void setTester_id(int tester_id) {
+		this.tester_id = tester_id;
+	}
+
+	public int getTester_id() {
+		return tester_id;
+	}
+	
 	public void addEgg(Egg egg)	{
 		if(egg1 == null)
 			egg1 = egg;
@@ -91,12 +105,51 @@ public class Nest extends MessageObject {
 			egg2 = egg;
 	}
 	
+	/**
+	 * checks whether the nest is complete
+	 * @return
+	 */
 	public boolean isComplete()	{
 		return (this.egg1 != null && this.egg1.isColored() && this.egg1.hasId() &&
 			this.egg2 != null && this.egg2.isColored() && this.egg2.hasId() &&
 			this.rabbit != null && this.rabbit.hasId());
 	}
 	
+	/**
+	 * checks if a product has an error
+	 * @return
+	 */
+	public boolean hasError()	{
+		return (this.egg1 != null && this.egg1.isError() &&
+			this.egg2 != null && this.egg2.isError() &&
+			this.rabbit != null && this.rabbit.isError());
+	}
+	
+	/**
+	 * checks whether nest is error free and is complete
+	 * @return
+	 */
+	public boolean isErrorFreeAndIsComplete()	{
+		return !this.hasError() && this.isComplete();
+	}
+	
+	public boolean isTested() {
+		return tested;
+	}
+
+	public void setTested(boolean tested) {
+		this.tested = tested;
+	}
+
+	public String toString()	{
+		return "NEST: [id: " + id + ", builder_id: " + builder_id + ", logistic_id: " + builder_id + 
+				",\nEGG1: \n" + egg1 + ", \nEGG2: \n" + egg2 + ", \nChocoRabbit: \n" + rabbit + "]";
+	}
+	
+	public String toSimpleString()	{
+		return "NEST: [id: " + id + "]"; 
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -107,6 +160,8 @@ public class Nest extends MessageObject {
 		result = prime * result + ((rabbit == null) ? 0 : rabbit.hashCode());
 		result = prime * result + (shipped ? 1231 : 1237);
 		result = prime * result + shipper_id;
+		result = prime * result + (tested ? 1231 : 1237);
+		result = prime * result + tester_id;
 		return result;
 	}
 
@@ -140,12 +195,12 @@ public class Nest extends MessageObject {
 			return false;
 		if (shipper_id != other.shipper_id)
 			return false;
+		if (tested != other.tested)
+			return false;
+		if (tester_id != other.tester_id)
+			return false;
 		return true;
 	}
 
-	public String toString()	{
-		return "NEST: [id: " + id + ", builder_id: " + builder_id + ", logistic_id: " + builder_id + 
-				",\nEGG1: \n" + egg1 + ", \nEGG2: \n" + egg2 + ", \nChocoRabbit: \n" + rabbit + "]";
-	}
-	
 }
+
