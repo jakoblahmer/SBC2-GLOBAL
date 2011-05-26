@@ -111,8 +111,8 @@ public class Egg extends Product {
 	
 	private String colorToString()	{
 		String ret = "[";
-		for (String s : color)	{
-			ret += s + "|";
+		for (int i=0; i< color.size();i++)	{
+			ret +=  color.get(i) + "(" + colorer_id.get(i) + ")|";
 		}
 		return ret.substring(0, ret.length()-1) + "]";
 	}
