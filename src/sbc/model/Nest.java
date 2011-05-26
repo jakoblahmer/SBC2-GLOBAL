@@ -10,6 +10,8 @@ public class Nest extends MessageObject {
 	
 	private int tester_id;
 	
+	private boolean error;
+	
 	private Egg egg1 = null;
 	
 	private Egg egg2 = null;
@@ -115,14 +117,23 @@ public class Nest extends MessageObject {
 			this.rabbit != null && this.rabbit.hasId());
 	}
 	
+	public boolean hasError()	{
+		return this.error;
+	}
+
+	public void setError(boolean error) {
+		this.error = error;
+	}
+
 	/**
 	 * checks if a product has an error
 	 * @return
-	 */
-	public boolean hasError()	{
-		return (this.egg1 != null && this.egg1.isError() &&
-			this.egg2 != null && this.egg2.isError() &&
-			this.rabbit != null && this.rabbit.isError());
+	 */	
+	public boolean calculateError()	{
+		this.error = (this.egg1 != null && this.egg1.isError() &&
+				this.egg2 != null && this.egg2.isError() &&
+				this.rabbit != null && this.rabbit.isError());
+		return this.error;
 	}
 	
 	/**
@@ -130,7 +141,7 @@ public class Nest extends MessageObject {
 	 * @return
 	 */
 	public boolean isErrorFreeAndIsComplete()	{
-		return !this.hasError() && this.isComplete();
+		return !this.error && this.isComplete();
 	}
 	
 	public boolean isTested() {
