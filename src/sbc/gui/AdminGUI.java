@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -31,6 +32,7 @@ import javax.swing.text.NumberFormatter;
 
 import org.apache.log4j.Logger;
 
+import sbc.gui.tablemodels.*;
 import sbc.model.Nest;
 
 /**
@@ -56,7 +58,9 @@ public class AdminGUI extends Thread {
 	private JTable detailTable;
 	// live info table
 	private JTable infoTable;
-
+	// table for error nests
+	private JTable errortable;
+	
 	// textfields for producer generation
 	private JFormattedTextField chocoElementsTextField;
 	private JFormattedTextField chocoProducersTextField;
@@ -65,6 +69,7 @@ public class AdminGUI extends Thread {
 	private ProducerInterface producerCallback;
 
 	private DefaultTableModel infoTableModel;
+
 
 	/**
 	 * constructer,
@@ -130,6 +135,8 @@ public class AdminGUI extends Thread {
 		// create produce functionality
 		this.createProduce();
 		
+		this.createErrorTable();
+		
 		// show it
 		frame.setVisible(true);
 	}
@@ -151,8 +158,7 @@ public class AdminGUI extends Thread {
 		Object[] ci = {"Nest ID",
 						"Egg1 ID",
 						"Egg2 ID",
-						"Builder ID",
-						"Logistic ID",
+						"Choco ID",
 						"status"};
 
 		model.setColumnIdentifiers(ci);
@@ -194,17 +200,27 @@ public class AdminGUI extends Thread {
 		model.addColumn("Value");
 		
 		// add columns
-		model.addRow(new Object[]{"Nest ID", ""});
-		model.addRow(new Object[]{"Egg1 ID", ""});
-		model.addRow(new Object[]{"Egg1 Chicken", ""});
-		model.addRow(new Object[]{"Egg1 Color", ""});
-		model.addRow(new Object[]{"Egg1 ColorRabbit", ""});
-		model.addRow(new Object[]{"Egg2 ID", ""});
-		model.addRow(new Object[]{"Egg2 Chicken", ""});
-		model.addRow(new Object[]{"Egg2 Color", ""});
-		model.addRow(new Object[]{"Egg2 ColorRabbit", ""});
-		model.addRow(new Object[]{"ChocoRabbit ID", ""});
-		model.addRow(new Object[]{"ChocoRabbit Producer", ""});
+		model.addRow(new Object[]{"Nest"});
+		model.addRow(new Object[]{"  ID"});
+		model.addRow(new Object[]{"	 defect", ""});
+		model.addRow(new Object[]{"Egg1", ""});
+		model.addRow(new Object[]{"	 ID", ""});
+		model.addRow(new Object[]{"	 Chicken", ""});
+		model.addRow(new Object[]{"	 Colors", ""});
+		model.addRow(new Object[]{"	 Color", ""});
+		model.addRow(new Object[]{"	 ColorRabbit", ""});
+		model.addRow(new Object[]{"	 defect", ""});
+		model.addRow(new Object[]{"Egg2", ""});
+		model.addRow(new Object[]{"	 ID", ""});
+		model.addRow(new Object[]{"	 Chicken", ""});
+		model.addRow(new Object[]{"	 Colors", ""});
+		model.addRow(new Object[]{"	 Color", ""});
+		model.addRow(new Object[]{"	 ColorRabbit", ""});
+		model.addRow(new Object[]{"	 defect", ""});
+		model.addRow(new Object[]{"ChocoRabbit", ""});
+		model.addRow(new Object[]{"	 ID", ""});
+		model.addRow(new Object[]{"	 Producer", ""});
+		model.addRow(new Object[]{"	 defect", ""});
 		
 		// create table
 		detailTable = new JTable();
@@ -220,8 +236,11 @@ public class AdminGUI extends Thread {
 		JScrollPane scrollPane = new JScrollPane(detailTable);
 
 		pane.add(scrollPane);
-		detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		scrollPane.setBounds(430 + insets.left, 65 + insets.top, 200, 150);
+//		detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		detailTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		detailTable.getColumnModel().getColumn(0).setPreferredWidth(110);
+		detailTable.getColumnModel().getColumn(1).setPreferredWidth(170);
+		scrollPane.setBounds(430 + insets.left, 65 + insets.top, 300, 150);
 	}
 	
 	/**
@@ -258,10 +277,48 @@ public class AdminGUI extends Thread {
 		pane.add(scrollPane);
 
 		infoTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		scrollPane.setBounds(10 + insets.left, 260 + insets.top, 170, 150);
+		scrollPane.setBounds(10 + insets.left, 260 + insets.top, 170, 110);
 		
 		infoTableModel = model;
 		
+	}
+	
+	
+	/**
+	 * creates (and adds) the overview table (containing all NESTS)
+	 */
+	private void createErrorTable()	{
+
+		// header
+		JLabel tableHeader = new JLabel("Defect Nests:");
+		tableHeader.setFont(new Font("Arial", Font.BOLD, 15));
+
+		pane.add(tableHeader);
+		tableHeader.setBounds(230 + insets.left, 235 + insets.top, 160, 20);
+
+		// table model (adminTableModel)
+		ErrorTableModel model = new ErrorTableModel();
+		Object[] ci = {"Nest ID",
+						"status"};
+
+		model.setColumnIdentifiers(ci);
+		
+		// table
+		errortable = new JTable();
+		// create resized table
+		errortable = autoResizeColWidth(errortable, model);
+		errortable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		errortable.getSelectionModel().addListSelectionListener(new ErrorRowListener());
+		
+		errortable.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		errortable.setFillsViewportHeight(true);
+
+		//Create the scroll pane and add the table to it.
+		JScrollPane scrollPane = new JScrollPane(errortable);
+
+		pane.add(scrollPane);
+		errortable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		scrollPane.setBounds(230 + insets.left, 260 + insets.top, 180, 110);
 	}
 	
 	/**
@@ -386,6 +443,7 @@ public class AdminGUI extends Thread {
 	/**
 	 * updates the live info
 	 * 
+	 * @deprecated should not be used in assignment2! instead use direct update and add methods
 	 * @param eggCount
 	 * @param eggColoredCount
 	 * @param chocoCount
@@ -434,19 +492,19 @@ public class AdminGUI extends Thread {
 		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 2, 1);
 	}
 	
-	public void updateNestCount(int count)	{
+	private void updateNestCount(int count)	{
 		// nest count
 		int tmp = (Integer)infoTableModel.getValueAt(3, 1) + count;
 		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 3, 1);
 	}
 	
-	public void updateCompletedNestCount(int count)	{
+	private void updateCompletedNestCount(int count)	{
 		// nest completed count
 		int tmp = (Integer)infoTableModel.getValueAt(4, 1) + count;
 		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 4, 1);
 	}
 	
-	public void updateErrorNestCount(int count)	{
+	private void updateErrorNestCount(int count)	{
 		// nest error count
 		int tmp = (Integer)infoTableModel.getValueAt(5, 1) + count;
 		infoTableModel.setValueAt((tmp < 0 ? 0 : tmp), 5, 1);
@@ -480,10 +538,15 @@ public class AdminGUI extends Thread {
 	 * @param nest
 	 */
 	public void addErrorNest(Nest nest)	{
+		if(!nest.hasError())	{
+			log.error("GIVEN NEST HAS NO ERROR");
+			return;
+		}
 		// remove 1 nest
 		this.updateNestCount(-1);
 		this.updateErrorNestCount(1);
 		this.updateNest(nest);
+		this.updateErrorNest(nest);
 	}
 	
 	/**
@@ -502,7 +565,19 @@ public class AdminGUI extends Thread {
 	 * @param object
 	 */
 	public void updateNest(Nest object) {
-		((AdminTableModel)table.getModel()).addRow(object);
+		if(object.hasError())	{
+			((AdminTableModel)table.getModel()).removeRow(object);
+		} else	{
+			((AdminTableModel)table.getModel()).addRow(object);
+		}
+	}
+	
+	/**
+	 * updates a errornest or sets a new errornest
+	 * @param object
+	 */
+	public void updateErrorNest(Nest object) {
+		((ErrorTableModel)errortable.getModel()).addRow(object);
 	}
 	
 	/**
@@ -518,26 +593,38 @@ public class AdminGUI extends Thread {
 		if(nest == null)
 			return;
 		
-		if(nest.hasId())
-			model.setValueAt(nest.getId(), 0, 1);
+		int pos = 1;
 		
+		if(nest.hasId())	{
+			model.setValueAt(nest.getId(), pos++, 1);
+		}
+		model.setValueAt(nest.hasError(), pos++, 1);
+		
+		pos++;
 		if(nest.getEgg1() != null)	{
-			model.setValueAt(nest.getEgg1().getId(), 1, 1);
-			model.setValueAt(nest.getEgg1().getProducer_id(),2,1);
-			model.setValueAt(nest.getEgg1().getColor(),3,1);
-			model.setValueAt(nest.getEgg1().getColorer_id(),4,1);
+			model.setValueAt(nest.getEgg1().getId(), pos++, 1);
+			model.setValueAt(nest.getEgg1().getProducer_id(),pos++,1);
+			model.setValueAt(nest.getEgg1().getColorCount(),pos++,1);
+			model.setValueAt(nest.getEgg1().getColor(),pos++,1);
+			model.setValueAt(nest.getEgg1().getColorer_id(),pos++,1);
+			model.setValueAt(nest.getEgg1().isError(),pos++,1);
 		}
 		
+		pos++;
 		if(nest.getEgg1() != null)	{
-			model.setValueAt(nest.getEgg2().getId(),5,1);
-			model.setValueAt(nest.getEgg2().getProducer_id(),6,1);
-			model.setValueAt(nest.getEgg2().getColor(),7,1);
-			model.setValueAt(nest.getEgg2().getColorer_id(),8,1);
+			model.setValueAt(nest.getEgg2().getId(),pos++,1);
+			model.setValueAt(nest.getEgg2().getProducer_id(),pos++,1);
+			model.setValueAt(nest.getEgg2().getColorCount(),pos++,1);
+			model.setValueAt(nest.getEgg2().getColor(),pos++,1);
+			model.setValueAt(nest.getEgg2().getColorer_id(),pos++,1);
+			model.setValueAt(nest.getEgg2().isError(),pos++,1);
 		}
 		
+		pos++;
 		if(nest.getRabbit() != null)	{
-			model.setValueAt(nest.getRabbit().getId(),9,1);
-			model.setValueAt(nest.getRabbit().getProducer_id(),10,1);
+			model.setValueAt(nest.getRabbit().getId(),pos++,1);
+			model.setValueAt(nest.getRabbit().getProducer_id(),pos++,1);
+			model.setValueAt(nest.getRabbit().isError(),pos++,1);
 		}
 	}
 	
@@ -546,8 +633,19 @@ public class AdminGUI extends Thread {
 			if (event.getValueIsAdjusting()) {
 				return;
 			}
-			log.info("INFOS for NEST ID: " + table.getModel().getValueAt(table.getSelectedRow(), 0));
-			addDataToDetailView(((AdminTableModel) table.getModel()).getNestForRow(table.getSelectedRow()));
+			addDataToDetailView(((DefaultNestTableModel) table.getModel()).getNestForRow(event.getFirstIndex()));
+			table.removeRowSelectionInterval(0, table.getRowCount() -1);
+		}
+	}
+	
+	private class ErrorRowListener implements ListSelectionListener {
+		public void valueChanged(ListSelectionEvent event) {
+			if (event.getValueIsAdjusting()) {
+				return;
+			}
+			
+			addDataToDetailView(((DefaultNestTableModel) errortable.getModel()).getNestForRow(event.getFirstIndex()));
+			errortable.removeRowSelectionInterval(0, errortable.getRowCount() -1);
 		}
 	}
 

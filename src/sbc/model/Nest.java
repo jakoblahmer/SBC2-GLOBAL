@@ -19,7 +19,6 @@ public class Nest extends MessageObject {
 	private ChocolateRabbit rabbit;
 	
 	private boolean shipped;
-	
 	private boolean tested;
 	
 	public Nest()	{
@@ -129,11 +128,13 @@ public class Nest extends MessageObject {
 	 * checks if a product has an error
 	 * @return
 	 */	
-	public boolean calculateError()	{
-		this.error = (this.egg1 != null && this.egg1.isError() &&
-				this.egg2 != null && this.egg2.isError() &&
-				this.rabbit != null && this.rabbit.isError());
-		return this.error;
+	public void calculateError()	{
+		if(this.isComplete())	{
+			this.error = (this.egg1.isError() || this.egg2.isError() || this.rabbit.isError());
+		} else	{
+			// nest is not complete => error
+			this.error = true;
+		}
 	}
 	
 	/**
@@ -144,14 +145,17 @@ public class Nest extends MessageObject {
 		return !this.error && this.isComplete();
 	}
 	
+	
 	public boolean isTested() {
 		return tested;
 	}
 
+	
 	public void setTested(boolean tested) {
 		this.tested = tested;
 	}
 
+	
 	public String toString()	{
 		return "NEST: [id: " + id + ", builder_id: " + builder_id + ", logistic_id: " + builder_id + 
 				",\nEGG1: \n" + egg1 + ", \nEGG2: \n" + egg2 + ", \nChocoRabbit: \n" + rabbit + "]";

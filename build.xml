@@ -34,6 +34,7 @@
 		<jar jarfile="${dist.dir}/${jarFileName.gui}.jar">
 			<fileset dir="${build.dir}">
 				<include name="sbc/gui/*"/>
+				<include name="sbc/gui/tablemodels/*"/>
 			</fileset>
 		</jar>
 	</target>
