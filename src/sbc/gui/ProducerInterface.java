@@ -1,5 +1,8 @@
 package sbc.gui;
 
+/**
+ * callback interface for producer
+ */
 public interface ProducerInterface {
 	/**
 	 * callback for creating the producers
