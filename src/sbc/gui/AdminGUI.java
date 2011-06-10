@@ -69,14 +69,17 @@ public class AdminGUI extends Thread {
 
 	private DefaultTableModel infoTableModel;
 
+	private String id;
+
 
 	/**
 	 * constructer,
 	 * 	expects a callback
 	 * @param prod
 	 */
-	public AdminGUI(ProducerInterface prod)	{
+	public AdminGUI(ProducerInterface prod, String id)	{
 		this.producerCallback = prod;
+		this.id = id;
 	}
 
 	
@@ -95,7 +98,7 @@ public class AdminGUI extends Thread {
 	private void createGUI()	{
 
 		// GLOBAL GUI SETTINGS
-		frame.setTitle("SBC JMS Osterhasenfabrik");
+		frame.setTitle("SBC JMS Osterhasenfabrik (" + id + ")");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.addWindowListener(new WindowAdapter() {
@@ -119,7 +122,7 @@ public class AdminGUI extends Thread {
 		this.pane.setLayout(null);
 
 		// generate HEADER
-		JLabel header = new JLabel("EasterBunny Company");
+		JLabel header = new JLabel("EasterBunny Company (" + id + ")");
 		header.setFont(new Font("Arial", Font.BOLD, 20));
 
 		pane.add(header);
