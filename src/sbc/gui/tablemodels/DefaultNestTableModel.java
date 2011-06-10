@@ -41,6 +41,8 @@ public abstract class DefaultNestTableModel extends DefaultTableModel {
 	 * @return
 	 */
 	public Nest getNestForRow(int row)	{
+		if(row < 0 || row > (this.getRowCount() -1))
+			return null;
 		return nestInfo.get(this.getValueAt(row, 0));
 	}
 	

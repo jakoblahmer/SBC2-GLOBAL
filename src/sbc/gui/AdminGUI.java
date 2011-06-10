@@ -170,7 +170,7 @@ public class AdminGUI extends Thread {
 		// create resized table
 		table = autoResizeColWidth(table, model);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.getSelectionModel().addListSelectionListener(new RowListener());
+		table.getSelectionModel().addListSelectionListener(new RowListener(table));
 		
 		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		table.setFillsViewportHeight(true);
@@ -181,6 +181,14 @@ public class AdminGUI extends Thread {
 		pane.add(scrollPane);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		scrollPane.setBounds(10 + insets.left, 65 + insets.top, 400, 150);
+		
+//		model.addRow(new Object[]{"0", "WTF", "WTF", "WTF", "WTF"});
+//		model.addRow(new Object[]{"1", "WTF", "WTF", "WTF", "WTF"});
+//		model.addRow(new Object[]{"2", "WTF", "WTF", "WTF", "WTF"});
+//		model.addRow(new Object[]{"3", "WTF", "WTF", "WTF", "WTF"});
+//		model.addRow(new Object[]{"4", "WTF", "WTF", "WTF", "WTF"});
+//		model.addRow(new Object[]{"5", "WTF", "WTF", "WTF", "WTF"});
+		
 	}
 
 	/**
@@ -310,7 +318,7 @@ public class AdminGUI extends Thread {
 		// create resized table
 		errortable = autoResizeColWidth(errortable, model);
 		errortable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		errortable.getSelectionModel().addListSelectionListener(new ErrorRowListener());
+		errortable.getSelectionModel().addListSelectionListener(new RowListener(errortable));
 		
 		errortable.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		errortable.setFillsViewportHeight(true);
@@ -321,6 +329,13 @@ public class AdminGUI extends Thread {
 		pane.add(scrollPane);
 		errortable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		scrollPane.setBounds(230 + insets.left, 260 + insets.top, 180, 110);
+		
+//		model.addRow(new Object[]{"0", "WTF"});
+//		model.addRow(new Object[]{"1", "WTF"});
+//		model.addRow(new Object[]{"2", "WTF"});
+//		model.addRow(new Object[]{"3", "WTF"});
+//		model.addRow(new Object[]{"4", "WTF"});
+//		model.addRow(new Object[]{"5", "WTF"});
 	}
 	
 	/**
@@ -513,11 +528,12 @@ public class AdminGUI extends Thread {
 	}
 	
 	/**
-	 * adds colored eggs (amount of count) and adopts the live statistics (removes it from eggs)
+	 * adds colored eggs (amount of count) and adopts the live statistics
 	 * @param count
 	 */
 	public void addColoredEgg(int count)	{
-		this.updateEgg(-count);
+//		removed via notification
+//		this.updateEgg(-count);
 		this.updateColoredEgg(count);
 	}
 	
@@ -631,26 +647,22 @@ public class AdminGUI extends Thread {
 	}
 	
 	private class RowListener implements ListSelectionListener {
-		public void valueChanged(ListSelectionEvent event) {
-			if (event.getValueIsAdjusting()) {
-				return;
-			}
-			addDataToDetailView(((DefaultNestTableModel) table.getModel()).getNestForRow(event.getFirstIndex()));
-			table.removeRowSelectionInterval(0, table.getRowCount() -1);
+		private JTable table;
+
+		public RowListener(JTable table) {
+			this.table = table;
 		}
-	}
-	
-	private class ErrorRowListener implements ListSelectionListener {
+
 		public void valueChanged(ListSelectionEvent event) {
 			if (event.getValueIsAdjusting()) {
 				return;
 			}
 			
-			addDataToDetailView(((DefaultNestTableModel) errortable.getModel()).getNestForRow(event.getFirstIndex()));
-			errortable.removeRowSelectionInterval(0, errortable.getRowCount() -1);
+			addDataToDetailView(((DefaultNestTableModel) this.table.getModel()).getNestForRow(this.table.getSelectedRow()));
+			this.table.removeRowSelectionInterval(0, this.table.getRowCount() -1);
 		}
 	}
-
+	
 	/**
 	 * resize columns of table
 	 * @param table
