@@ -529,11 +529,11 @@ public class AdminGUI extends Thread {
 	
 	/**
 	 * adds colored eggs (amount of count) and adopts the live statistics
+	 * removes count from the eggcount
 	 * @param count
 	 */
 	public void addColoredEgg(int count)	{
-//		removed via notification
-//		this.updateEgg(-count);
+		this.updateEgg(-count);
 		this.updateColoredEgg(count);
 	}
 	
