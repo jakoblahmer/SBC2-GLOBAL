@@ -2,7 +2,7 @@ package sbc.model;
 
 public class Nest extends MessageObject {
 
-	private static final long serialVersionUID = 1644743739476877L;
+	private static final long serialVersionUID = 1L;
 
 	private int builder_id;
 	

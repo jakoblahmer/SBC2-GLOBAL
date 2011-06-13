@@ -2,8 +2,8 @@ package sbc.model;
 
 public class ChocolateRabbit extends Product {
 
-	private static final long serialVersionUID = 1101338789645290893L;
-	
+	private static final long serialVersionUID = 1L;
+
 	public ChocolateRabbit()	{
 		super();
 	}

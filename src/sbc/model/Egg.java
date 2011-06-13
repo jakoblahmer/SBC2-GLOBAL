@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class Egg extends Product {
 
-	private static final long serialVersionUID = 8436930076543223209L;
-	
+	private static final long serialVersionUID = 1L;
+
 	private int colorCount = -1;
 	
 	private boolean colored;
