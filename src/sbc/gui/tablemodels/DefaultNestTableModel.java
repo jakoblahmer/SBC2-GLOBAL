@@ -6,7 +6,7 @@ import sbc.model.Nest;
 
 public abstract class DefaultNestTableModel extends DefaultTableModel {
 
-	protected HashMap<Integer, Nest> nestInfo = new HashMap<Integer, Nest>();
+	protected HashMap<String, Nest> nestInfo = new HashMap<String, Nest>();
 	
 	/**
 	 * implemented by subclasses
@@ -20,13 +20,13 @@ public abstract class DefaultNestTableModel extends DefaultTableModel {
 	 * @param nest
 	 */
 	public void removeRow(Nest nest)	{
-		if(!nestInfo.containsKey(nest.getId()))	{
+		if(!nestInfo.containsKey(nest.getIdAsString()))	{
 			return;
 		}
 		// find row
 		int row = -1;
 		for(int i = this.getRowCount() -1; i>= 0; i--)	{
-			if((Integer)this.getValueAt(i, 0) == nest.getId())	{
+			if(this.getValueAt(i, 0).equals(nest.getIdAsString()))	{
 				row = i;
 				break;
 			}

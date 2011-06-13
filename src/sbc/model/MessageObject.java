@@ -25,6 +25,10 @@ public abstract class MessageObject implements Serializable {
 		this.id = id;
 	}
 
+	public String getIdAsString()	{
+		return String.valueOf(id);
+	}
+	
 	public boolean hasId()	{
 		return (id != -1);
 	}

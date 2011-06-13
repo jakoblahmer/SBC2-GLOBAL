@@ -19,15 +19,15 @@ public class AdminTableModel extends DefaultNestTableModel {
 							(nest.isShipped() ? "completed" : "shipping")
 							: "testing");
 		
-		if(!nestInfo.containsKey(nest.getId()))	{
-			nestInfo.put(nest.getId(), nest);
-			this.addRow(new Object[]{nest.getId(), nest.getEgg1().getId(), nest.getEgg2().getId(), nest.getRabbit().getId(), status});
+		if(!nestInfo.containsKey(nest.getIdAsString()))	{
+			nestInfo.put(nest.getIdAsString(), nest);
+			this.addRow(new Object[]{nest.getIdAsString(), nest.getEgg1().getIdAsString(), nest.getEgg2().getIdAsString(), nest.getRabbit().getIdAsString(), status});
 			return;
 		}
 		
 		int row = -1;
 		for(int i = this.getRowCount() -1; i>= 0; i--)	{
-			if((Integer)this.getValueAt(i, 0) == nest.getId())	{
+			if(this.getValueAt(i, 0).equals(nest.getIdAsString()))	{
 				row = i;
 				break;
 			}
@@ -39,15 +39,15 @@ public class AdminTableModel extends DefaultNestTableModel {
 		}
 		
 		// egg1 id
-		setValueAt(nest.getEgg1().getId(), row, 1);
+		setValueAt(nest.getEgg1().getIdAsString(), row, 1);
 		// egg2 id
-		setValueAt(nest.getEgg2().getId(), row, 2);
+		setValueAt(nest.getEgg2().getIdAsString(), row, 2);
 		// choco id
-		setValueAt(nest.getRabbit().getId(), row, 3);
+		setValueAt(nest.getRabbit().getIdAsString(), row, 3);
 		// status
 		setValueAt(status, row, 4);
 		
-		nestInfo.put(nest.getId(), nest);
+		nestInfo.put(nest.getIdAsString(), nest);
 	}
 
 }

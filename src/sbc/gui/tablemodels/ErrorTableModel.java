@@ -12,15 +12,15 @@ public class ErrorTableModel extends DefaultNestTableModel {
 	@Override
 	public void addRow(Nest nest)	{
 		String status = "defect";
-		if(!nestInfo.containsKey(nest.getId()))	{
-			nestInfo.put(nest.getId(), nest);
-			this.addRow(new Object[]{nest.getId(), status});
+		if(!nestInfo.containsKey(nest.getIdAsString()))	{
+			nestInfo.put(nest.getIdAsString(), nest);
+			this.addRow(new Object[]{nest.getIdAsString(), status});
 			return;
 		}
 		
 		int row = -1;
 		for(int i = this.getRowCount() -1; i>= 0; i--)	{
-			if((Integer)this.getValueAt(i, 0) == nest.getId())	{
+			if(this.getValueAt(i, 0).equals(nest.getIdAsString()))	{
 				row = i;
 				break;
 			}
@@ -34,7 +34,7 @@ public class ErrorTableModel extends DefaultNestTableModel {
 		// status
 		setValueAt(status, row, 1);
 		
-		nestInfo.put(nest.getId(), nest);
+		nestInfo.put(nest.getIdAsString(), nest);
 	}
 
 }

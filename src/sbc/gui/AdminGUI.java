@@ -614,13 +614,13 @@ public class AdminGUI extends Thread {
 		int pos = 1;
 		
 		if(nest.hasId())	{
-			model.setValueAt(nest.getId(), pos++, 1);
+			model.setValueAt(nest.getIdAsString(), pos++, 1);
 		}
 		model.setValueAt(nest.hasError(), pos++, 1);
 		
 		pos++;
 		if(nest.getEgg1() != null)	{
-			model.setValueAt(nest.getEgg1().getId(), pos++, 1);
+			model.setValueAt(nest.getEgg1().getIdAsString(), pos++, 1);
 			model.setValueAt(nest.getEgg1().getProducer_id(),pos++,1);
 			model.setValueAt(nest.getEgg1().getColorCount(),pos++,1);
 			model.setValueAt(nest.getEgg1().getColor(),pos++,1);
@@ -630,7 +630,7 @@ public class AdminGUI extends Thread {
 		
 		pos++;
 		if(nest.getEgg1() != null)	{
-			model.setValueAt(nest.getEgg2().getId(),pos++,1);
+			model.setValueAt(nest.getEgg2().getIdAsString(),pos++,1);
 			model.setValueAt(nest.getEgg2().getProducer_id(),pos++,1);
 			model.setValueAt(nest.getEgg2().getColorCount(),pos++,1);
 			model.setValueAt(nest.getEgg2().getColor(),pos++,1);
@@ -640,7 +640,7 @@ public class AdminGUI extends Thread {
 		
 		pos++;
 		if(nest.getRabbit() != null)	{
-			model.setValueAt(nest.getRabbit().getId(),pos++,1);
+			model.setValueAt(nest.getRabbit().getIdAsString(),pos++,1);
 			model.setValueAt(nest.getRabbit().getProducer_id(),pos++,1);
 			model.setValueAt(nest.getRabbit().isError(),pos++,1);
 		}
